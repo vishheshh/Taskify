@@ -2,53 +2,49 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import userRouter from "./routers/User.js";
 import taskRouter from "./routers/Task.js";
 
+dotenv.config();
 
 const app = express();
 app.use(express.json());
-dotenv.config();
+app.use(cookieParser());
 
-// env config
-const PORT = process.env.PORT; 
-const DB_URI = process.env.DB_URI;
-const DB_NAME = process.env.DB_NAME;
+// Environment Variables
+const PORT = process.env.PORT || 5000;
+const DB_URI = process.env.DB_URI || "mongodb://localhost:27017/task_manager";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
+// CORS Configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE" ,"PATCH"],
+    origin: [FRONTEND_URL, "https://taskify-4ttl.onrender.com"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
+// Static Files
+app.use(express.static("Public"));
 
+// Routes
 app.use("/user", userRouter);
 app.use("/tasks", taskRouter);
 
-// Middleware 
-app.use(cookieParser());
-
-app.use(express.static("Public")); // Serve static files from 'Public' directory
-
-
-// Tester 
+// Test Route
 app.get("/test", (req, res) => {
   res.send("You are authenticated and have access to this route");
 });
 
-
-
+// MongoDB Connection
 mongoose
-  .connect("mongodb://localhost:27017/", {
-    dbName: "task_manager",
-  })
-  .then((result) => {
-    app.listen(5000, () => console.log("server listening on port 5000"));
+  .connect(DB_URI, { dbName: process.env.DB_NAME || "task_manager" })
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
   })
   .catch((err) => {
-    console.log("connection failed");
+    console.error("Database connection failed:", err.message);
   });
