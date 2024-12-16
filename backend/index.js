@@ -14,13 +14,13 @@ app.use(cookieParser());
 
 // Environment Variables
 const PORT = process.env.PORT || 5000;
-const DB_URI = process.env.DB_URI || "mongodb://localhost:27017/task_manager";
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+const DB_URI = process.env.DB_URI;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"; // Default for local dev
 
 // CORS Configuration
 app.use(
   cors({
-    origin: [FRONTEND_URL, "https://taskify-4ttl.onrender.com"],
+    origin: [FRONTEND_URL, "https://taskify-frontend-rlw0.onrender.com"], // Add all allowed frontend URLs
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
