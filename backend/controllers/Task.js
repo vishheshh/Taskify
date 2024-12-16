@@ -124,7 +124,12 @@ class TaskController {
         }
 
         // Validate sort field (only one field)
-        const validSortFields = ["priority", "status", "createdAt","updatedAt"];
+        const validSortFields = [
+          "priority",
+          "status",
+          "createdAt",
+          "updatedAt",
+        ];
         if (!validSortFields.includes(sortBy)) {
           return reject({
             msg: "Invalid sort field. Valid fields are 'priority', 'status', 'createdAt'.",
@@ -418,10 +423,11 @@ class TaskController {
 
         const completedTaskTimes = tasks
           .filter((task) => task.status)
-          .map(
-            (task) =>
-              (new Date(task.endTime) - new Date(task.startTime)) / 3600000
-          ); // Convert ms to hours
+          .map((task) => {
+            const time =
+              (new Date(task.endTime) - new Date(task.startTime)) / 3600000; // Convert ms to hours
+            return time >= 0 ? time : 0; // Ensure non-negative time
+          });
 
         const pendingTaskTimes = tasks
           .filter((task) => !task.status)
@@ -438,8 +444,8 @@ class TaskController {
 
             const priority = task.priority || 1; // Default to priority 1 if not set
             return {
-              timeLapsed,
-              balanceTime,
+              timeLapsed: timeLapsed >= 0 ? timeLapsed : 0, // Ensure non-negative time
+              balanceTime: balanceTime >= 0 ? balanceTime : 0, // Ensure non-negative balance time
               priority,
             };
           });

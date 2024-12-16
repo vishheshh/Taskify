@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
@@ -20,7 +21,7 @@ export const fetchTasks = createAsyncThunk(
       const order = urlParams.get("order"); // Get sorting order (asc or desc)
 
       // Validate sortBy field to ensure it's one of the allowed values
-      const validSortFields = ["priority", "status", "createdAt","updatedAt"];
+      const validSortFields = ["priority", "status", "createdAt", "updatedAt"];
       if (sortBy && !validSortFields.includes(sortBy)) {
         return rejectWithValue(
           "Invalid sort field. Valid fields are 'priority', 'status', 'createdAt'."
@@ -28,7 +29,7 @@ export const fetchTasks = createAsyncThunk(
       }
 
       // Construct the URL based on query parameters
-      let url = `http://localhost:5000/tasks/get/${userId}`;
+      let url = `${BACKEND_URL}/tasks/get/${userId}`;
       let queryParams = [];
 
       if (priority) {
@@ -49,7 +50,6 @@ export const fetchTasks = createAsyncThunk(
         url += `?${queryParams.join("&")}`;
       }
 
-      // console.log("API URL:", url);
       const response = await axios.get(url);
 
       if (response.data.status === 1) {
@@ -59,7 +59,8 @@ export const fetchTasks = createAsyncThunk(
           completionStatus: task.completionStatus || false,
         }));
 
-        return tasks;
+        // If no tasks are found, return an empty array
+        return tasks.length > 0 ? tasks : [];
       } else {
         return rejectWithValue(response.data.msg);
       }
@@ -68,6 +69,7 @@ export const fetchTasks = createAsyncThunk(
     }
   }
 );
+
 
 
 const TaskSlice = createSlice({

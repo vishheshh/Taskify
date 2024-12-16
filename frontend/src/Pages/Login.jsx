@@ -65,7 +65,7 @@ const handleLogin = async (e) => {
           user: response.data.user,
         })
       );
-      console.log(response.data.user)
+      // console.log(response.data.user)
       // Check if response.data (user's tasks) is empty
       // if (response.data.tasks.length === 0) {
       //   // Create a new task if no tasks are found

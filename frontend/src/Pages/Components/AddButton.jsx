@@ -186,6 +186,7 @@ const handleSubmit = async (e) => {
             <button className="button-confirm" type="submit">
               Add Task
             </button>
+            no form reset for tester's ease of use :)
           </form>
         </FormWrapper>
       )}
