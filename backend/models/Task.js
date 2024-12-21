@@ -41,7 +41,7 @@ const taskSchema = new mongoose.Schema(
   }
 );
 // mapping userId and taskId so that an individual can not have a duplicate task id , but if other user adds same numbered task , he should be allowed to do so along with a unique taskId and no issue comes while fetching individual id's data through taskId 
-//we simply create a unique index on the combination of userId and taskId , This means that for each userId, the taskId must be unique
+//we simply   
 taskSchema.index({ userId: 1, taskId: 1 }, { unique: true });
 
 const Task = mongoose.model("Task", taskSchema);

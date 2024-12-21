@@ -77,9 +77,6 @@ taskRouter.get("/get/:userId", (req, res) => {
     });
 });
 
-
-
-
 // Edit task by userId and taskId
   taskRouter.put("/edit/:userId/:taskId", (req, res) => {
     const { userId, taskId } = req.params;
@@ -120,7 +117,7 @@ taskRouter.delete("/delete/:userId/:taskId", (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Internal Server Error",
-        error: err.message,
+        error: err.message,         
       });
     });
 });
