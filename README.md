@@ -25,7 +25,7 @@ Taskify is a robust task management application that helps users efficiently org
      - Percentage of completed and pending tasks.
      - Time lapsed and balance estimated time left for pending tasks by priority.
      - Overall actual average time for completion.
-       <img src="./readmeimg/dashboard" alt="Cat Image" width="800"/>
+       <img src="./readmeimg/dashboard.png" alt="Cat Image" width="800"/>
        
 4. **Time Calculations**:
    - Completed task time: `end time - start time`.
